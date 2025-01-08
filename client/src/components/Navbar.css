@@ -1,0 +1,18 @@
+.navbar {
+    @apply flex justify-between items-center px-8 py-4 bg-black text-white shadow-md;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.navbar-brand {
+    @apply text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-accent to-gray-300;
+}
+
+.navbar-links {
+    @apply flex gap-6;
+}
+
+.navbar-links a {
+    @apply text-gray-300 font-medium hover:text-accent transition-colors duration-200;
+}

@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-feature-settings: 'ss01' 1, 'ss02' 1, 'ss03' 1, 'ss04' 1, 'ss05' 1;
+  }
+  
+  body {
+    @apply bg-black text-white antialiased;
+  }
+}
+
+@layer components {
+  .button {
+    @apply px-4 py-2 rounded-lg bg-white text-black font-medium
+    hover:opacity-90 transition-all duration-200;
+  }
+  
+  .card {
+    @apply p-6 bg-neutral-900/30 rounded-xl border border-neutral-800 
+    hover:border-neutral-700 transition-all hover:scale-[1.02];
+  }
+}
+
+/* Hide scrollbar but maintain functionality */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.home{
+  margin-top: 30px;
+}

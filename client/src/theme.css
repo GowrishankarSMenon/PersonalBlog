@@ -1,0 +1,17 @@
+:root {
+    --color-primary: #e3f3ef; /* Accent color */
+    --color-background: #0b1d19; /* Background color */
+    --color-card-bg: #1a1a1a; /* Card background */
+    --color-card-text: #ffffff; /* Card text */
+    --color-footer-bg: #111111; /* Footer background */
+    --color-footer-text: #aaaaaa; /* Footer text */
+    --color-hover: #4caf50; /* Hover color */
+  }
+
+  body {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+  }
+  footer {
+    background-color: var(--primary-color); /* Ensure this is inherited from theme */
+  }
