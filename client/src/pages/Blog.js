@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { Search, ChevronDown } from 'lucide-react';
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortCriteria, setSortCriteria] = useState('date'); // Default sorting by date
+  const [sortCriteria, setSortCriteria] = useState('date');
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isSortExpanded, setIsSortExpanded] = useState(false);
+  const searchContainerRef = useRef(null);
+  const searchInputRef = useRef(null);
+  const sortContainerRef = useRef(null);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -23,6 +29,32 @@ const Blog = () => {
     fetchBlogs();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target)
+      ) {
+        setIsSearchExpanded(false);
+      }
+      if (
+        sortContainerRef.current &&
+        !sortContainerRef.current.contains(event.target)
+      ) {
+        setIsSortExpanded(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (isSearchExpanded && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchExpanded]);
+
   const handleSort = (criteria) => {
     setSortCriteria(criteria);
     const sortedBlogs = [...blogs].sort((a, b) => {
@@ -38,6 +70,21 @@ const Blog = () => {
     setBlogs(sortedBlogs);
   };
 
+  const handleSortSelect = (criteria) => {
+    setSortCriteria(criteria);
+    setIsSortExpanded(false);
+    handleSort(criteria);
+  };
+
+  const getSortLabel = (criteria) => {
+    const labels = {
+      date: 'Sort by Date',
+      title: 'Sort by Title',
+      readTime: 'Sort by Read Time'
+    };
+    return labels[criteria] || labels.date;
+  };
+
   const filteredBlogs = blogs.filter(
     (blog) =>
       blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -50,29 +97,72 @@ const Blog = () => {
 
   return (
     <div className="max-w-5xl mx-auto pt-32">
-      {/* Heading and Controls */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
         <h1 className="text-6xl font-semibold tracking-tight">Latest Posts</h1>
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-6 md:mt-0">
-          {/* Search */}
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search blogs..."
-            className="w-full sm:w-auto p-3 rounded-md bg-neutral-900/30 border border-neutral-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-neutral-300 transition-all"
-          />
+          {/* Animated Search Bar */}
+          <div ref={searchContainerRef} className="relative flex items-center">
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search blogs..."
+              className={`
+                p-3 rounded-md bg-neutral-900/30 border border-neutral-800 
+                focus:border-blue-500 focus:ring-1 focus:ring-blue-500 
+                text-neutral-300 transition-all duration-300 ease-in-out absolute right-0
+                ${isSearchExpanded ? 'w-64 opacity-100' : 'w-0 opacity-0 p-0 border-0'}
+              `}
+            />
+            <button
+              onClick={() => setIsSearchExpanded(!isSearchExpanded)}
+              className={`
+                p-3 rounded-md bg-neutral-900/30 border border-neutral-800 
+                hover:border-neutral-700 transition-all duration-300
+                ${isSearchExpanded ? 'relative z-10 border-l-0' : ''}
+              `}
+            >
+              <Search className="w-5 h-5 text-neutral-300" />
+            </button>
+          </div>
 
-          {/* Sorting */}
-          <select
-            value={sortCriteria}
-            onChange={(e) => handleSort(e.target.value)}
-            className="p-3 rounded-md bg-neutral-900/30 border border-neutral-800 text-neutral-300 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-          >
-            <option value="date">Sort by Date</option>
-            <option value="title">Sort by Title</option>
-            <option value="readTime">Sort by Read Time</option>
-          </select>
+          {/* Animated Sort Dropdown */}
+          <div ref={sortContainerRef} className="relative">
+            <button
+              onClick={() => setIsSortExpanded(!isSortExpanded)}
+              className="p-3 rounded-md bg-neutral-900/30 border border-neutral-800 hover:border-neutral-700 transition-all flex items-center gap-2 min-w-[140px] justify-between"
+            >
+              <span className="text-neutral-300 text-sm">{getSortLabel(sortCriteria)}</span>
+              <ChevronDown className={`w-4 h-4 text-neutral-300 transition-transform duration-300 ${isSortExpanded ? 'rotate-180' : ''}`} />
+            </button>
+            
+            <div className={`
+              absolute top-full right-0 mt-2 w-full py-2
+              bg-neutral-900/30 backdrop-blur-sm border border-neutral-800 rounded-md
+              transform transition-all duration-300 origin-top z-50
+              ${isSortExpanded ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}
+            `}>
+              <button
+                onClick={() => handleSortSelect('date')}
+                className="w-full px-4 py-2 text-left text-sm text-neutral-300 hover:bg-neutral-800/50 transition-colors"
+              >
+                Sort by Date
+              </button>
+              <button
+                onClick={() => handleSortSelect('title')}
+                className="w-full px-4 py-2 text-left text-sm text-neutral-300 hover:bg-neutral-800/50 transition-colors"
+              >
+                Sort by Title
+              </button>
+              <button
+                onClick={() => handleSortSelect('readTime')}
+                className="w-full px-4 py-2 text-left text-sm text-neutral-300 hover:bg-neutral-800/50 transition-colors"
+              >
+                Sort by Read Time
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
