@@ -1,25 +1,28 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const BlogPost = () => {
-  const { slug } = useParams();
+  const { id } = useParams();
   const [post, setPost] = React.useState(null);
+  const [error, setError] = React.useState(null);
 
   React.useEffect(() => {
-    const loadPost = async () => {
+    const fetchPost = async () => {
       try {
-        const post = await import(`../content/${slug}.json`);
-        setPost(post);
+        const response = await fetch(`http://localhost:5000/api/blogs/${id}`);
+        if (!response.ok) throw new Error('Post not found');
+        const data = await response.json();
+        setPost(data);
       } catch (error) {
-        console.error('Failed to load post:', error);
-        setPost(null);
+        setError('Failed to load post');
+        console.error('Error:', error);
       }
     };
 
-    loadPost();
-  }, [slug]);
+    fetchPost();
+  }, [id]);
 
-  if (!post) {
+  if (error || !post) {
     return (
       <div className="max-w-4xl mx-auto pt-32">
         <h1 className="text-4xl font-bold">Post not found</h1>
@@ -40,7 +43,7 @@ const BlogPost = () => {
           <h1 className="text-5xl font-bold tracking-tight">{post.title}</h1>
           <div className="mt-4 flex items-center gap-4 text-neutral-400">
             <time>{new Date(post.date).toLocaleDateString()}</time>
-            <span>{post.readTime}</span>
+            <span>{post.read_time}</span>
           </div>
         </header>
         <div

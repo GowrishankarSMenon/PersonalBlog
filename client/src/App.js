@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Blog from './pages/Blog';
 import BackgroundGradient from './components/BackgroundGradient';
 import BlogPost from './pages/BlogPost';
+import Admin from './pages/Admin';
 import './App.css';
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </main>
       </div>
