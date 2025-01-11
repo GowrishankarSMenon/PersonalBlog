@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Instagram, Linkedin } from 'lucide-react';
+import { useAuth } from '../AuthContext'; // Import the useAuth hook
 
 const Home = () => {
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const { setIsAuthenticated } = useAuth(); // Access setIsAuthenticated from AuthContext
   const navigate = useNavigate();
 
   const socials = [
@@ -19,33 +21,35 @@ const Home = () => {
     },
   ];
 
-  // Function to validate the admin password
-  const validatePassword = async (password) => {
-    try {
-      const response = await fetch('http://localhost:5000/api/validate-admin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password }),
-      });
+  const validatePassword = useCallback(
+    async (password) => {
+      try {
+        const response = await fetch('http://localhost:5000/api/validate-admin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ password }),
+        });
 
-      const result = await response.json();
+        const result = await response.json();
 
-      if (result.success) {
-        alert('Access Granted! Redirecting to Admin Panel...');
-        setIsUnlocked(true);
-        navigate('/admin'); // Redirect to the admin panel
-      } else {
-        alert('Incorrect Password. Access Denied.');
+        if (result.success) {
+          alert('Access Granted! Redirecting to Admin Panel...');
+          setIsUnlocked(true);
+          setIsAuthenticated(true); // Update the global authentication state
+          navigate('/admin');
+        } else {
+          alert('Incorrect Password. Access Denied.');
+        }
+      } catch (error) {
+        console.error('Error validating password:', error);
+        alert('An error occurred while validating the password.');
       }
-    } catch (error) {
-      console.error('Error validating password:', error);
-      alert('An error occurred while validating the password.');
-    }
-  };
+    },
+    [navigate, setIsAuthenticated]
+  );
 
-  // Detect "Ctrl + Shift + A" shortcut
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.ctrlKey && event.shiftKey && event.key === 'A') {
@@ -60,7 +64,7 @@ const Home = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, []);
+  }, [validatePassword]);
 
   return (
     <div className="max-w-4xl mx-auto pt-32 home">
