@@ -1,11 +1,13 @@
 const { Client } = require('pg');
+require('dotenv').config();
 
 const client = new Client({
-    user: 'postgres',  // your PostgreSQL username
-    host: 'localhost',
-    database: 'blog_app', // the database you created
-    password: 'kannan',  // your PostgreSQL password
-    port: 5432,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+    ssl: { rejectUnauthorized: false }
 });
 
 client.connect()
