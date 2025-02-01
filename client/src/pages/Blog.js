@@ -16,7 +16,7 @@ const Blog = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/blogs');
+        const response = await fetch('https://personalblog-production-bc94.up.railway.app/api/blogs');
         if (!response.ok) throw new Error('Failed to fetch blogs');
         const data = await response.json();
         setBlogs(data.sort((a, b) => new Date(b.date) - new Date(a.date)));

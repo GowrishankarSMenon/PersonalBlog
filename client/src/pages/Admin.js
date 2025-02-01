@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Pencil, Trash2, Plus, X, Check, Clock, Calendar, Search, ChevronDown } from 'lucide-react';
+import { Pencil, Trash2, Plus, Clock, Calendar, Search, ChevronDown } from 'lucide-react';
 
 const Admin = () => {
   const [blogs, setBlogs] = useState([]);
@@ -57,7 +57,7 @@ const Admin = () => {
 
   const fetchBlogs = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/blogs');
+      const response = await fetch('https://personalblog-production-bc94.up.railway.app/api/blogs');
       const data = await response.json();
       setBlogs(data);
     } catch (error) {
@@ -104,7 +104,7 @@ const Admin = () => {
         readTime: formData.readTime || calculateReadTime(formData.content),
       };
 
-      const response = await fetch('http://localhost:5000/api/blogs', {
+      const response = await fetch('https://personalblog-production-bc94.up.railway.app/api/blogs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(processedData),
@@ -130,7 +130,7 @@ const Admin = () => {
         readTime: formData.readTime || calculateReadTime(formData.content),
       };
 
-      const response = await fetch(`http://localhost:5000/api/blogs/${editingId}`, {
+      const response = await fetch(`https://personalblog-production-bc94.up.railway.app/api/blogs/${editingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -157,7 +157,7 @@ const Admin = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/blogs/${id}`, {
+        const response = await fetch(`https://personalblog-production-bc94.up.railway.app/api/blogs/${id}`, {
           method: 'DELETE',
         });
 

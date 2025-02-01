@@ -9,7 +9,7 @@ const BlogPost = () => {
   React.useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/blogs/${id}`);
+        const response = await fetch(`https://personalblog-production-bc94.up.railway.app/api/blogs/${id}`);
         if (!response.ok) throw new Error('Post not found');
         const data = await response.json();
         setPost(data);

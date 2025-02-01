@@ -2,7 +2,7 @@
   "name": "personal-blog",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "https://personalblog-production-bc94.up.railway.app/",
   "dependencies": {
     "buffer": "^6.0.3",
     "cra-template": "1.2.0",
@@ -39,6 +39,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@tailwindcss/typography": "^0.5.15",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
