@@ -99,9 +99,10 @@ const Blog = () => {
     <div className="max-w-5xl mx-auto pt-32">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
         <h1 className="text-6xl font-semibold tracking-tight">Latest Posts</h1>
-        <div className="flex flex-col sm:flex-row items-center gap-4 mt-6 md:mt-0">
+        <div className="flex flex-row items-center justify-between w-full md:w-auto md:justify-start md:gap-4 mt-6 md:mt-0">
+          {/*  <div className="flex flex-col sm:flex-row items-center gap-4 mt-6 md:mt-0"> */}
           {/* Animated Search Bar */}
-          <div ref={searchContainerRef} className="relative flex items-center">
+          <div ref={searchContainerRef} className="relative flex items-center order-last md:order-first">
             <input
               ref={searchInputRef}
               type="text"
@@ -128,7 +129,7 @@ const Blog = () => {
           </div>
 
           {/* Animated Sort Dropdown */}
-          <div ref={sortContainerRef} className="relative">
+          <div ref={sortContainerRef} className="relative order-first md:order-last">
             <button
               onClick={() => setIsSortExpanded(!isSortExpanded)}
               className="p-3 rounded-md bg-neutral-900/30 border border-neutral-800 hover:border-neutral-700 transition-all flex items-center gap-2 min-w-[140px] justify-between"

@@ -99,7 +99,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="mt-16">
+      <section className="mt-16 pb-4 sm:pb-0">
         <h3 className="text-xl font-medium mb-6">Connect with me</h3>
         <div className="flex gap-4">
           {socials.map((social) => (
@@ -116,6 +116,7 @@ const Home = () => {
           ))}
         </div>
       </section>
+
     </div>
   );
 };
