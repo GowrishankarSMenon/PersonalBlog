@@ -4,6 +4,7 @@ import { Instagram, Linkedin } from 'lucide-react';
 import { useAuth } from '../AuthContext'; // Import the useAuth hook
 
 const Home = () => {
+  // eslint-disable-next-line no-unused-vars
   const [isUnlocked, setIsUnlocked] = useState(false);
   const { setIsAuthenticated } = useAuth(); // Access setIsAuthenticated from AuthContext
   const navigate = useNavigate();
